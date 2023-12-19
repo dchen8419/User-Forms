@@ -1,33 +1,26 @@
-import { useState } from "react";
+import { useRef } from "react";
 
+
+//Advantage of using useRef: 
+  //is less code required
+  //We did not need change handlers or onChange
+//Disadvantage of using useRef:
+  //resetting values in a clean way is harder because you're discourage to useRef for manipulating DOM
+  //Can be reset but not recommend and will end up using many refs for more complex forms
 export default function Login() {
-  // const [enteredEmail, setEnteredEmail] = useState('');
-  // const [enteredPassword, setEnteredPassword] = useState('');
-  const [enteredValues, setEnteredValues] = useState({
-    email: '',
-    password: ''
-  })
+  const email = useRef();
+  const password = useRef();
 
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(enteredValues)
+
+    const enteredEmail = email.current.value;
+    const enteredPassword = password.current.value;
+
+    console.log(enteredEmail, enteredPassword)
   }
-
-  // function handleEmailChange(event) {
-  //   setEnteredEmail(event.target.value);
-  // }
-
-  // function handlePasswordChange(event) {
-  //   setEnteredPassword(event.target.value);
-  // }
-
-  function handleInputChange(identifier, value) {
-    setEnteredValues(prevValues => ({
-      ...prevValues,
-      [identifier]: value
-    }))
-  }
+  
 
   return (
     <form onSubmit={handleSubmit}>
@@ -40,8 +33,7 @@ export default function Login() {
             id="email" 
             type="email" 
             name="email" 
-            onChange={(event) => handleInputChange('email', event.target.value)}
-            value={enteredValues.email}
+            ref={email}
           />
         </div>
 
@@ -51,8 +43,7 @@ export default function Login() {
             id="password" 
             type="password" 
             name="password" 
-            onChange={(event) => handleInputChange('password', event.target.value)}
-            value={enteredValues.password}
+            ref={password}
             />
         </div>
       </div>
