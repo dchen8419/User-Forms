@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 
 //Advantage of using useRef: 
@@ -8,6 +8,8 @@ import { useRef } from "react";
   //resetting values in a clean way is harder because you're discourage to useRef for manipulating DOM
   //Can be reset but not recommend and will end up using many refs for more complex forms
 export default function Login() {
+  const [emailIsInvalid, setEmailIsInvalid] = useState(false);
+
   const email = useRef();
   const password = useRef();
 
@@ -18,8 +20,14 @@ export default function Login() {
     const enteredEmail = email.current.value;
     const enteredPassword = password.current.value;
 
-    console.log(enteredEmail, enteredPassword)
-    email.current.value = '';
+    const emailIsValid = enteredEmail.includes('@');
+
+    if (!emailIsValid) {
+      setEmailIsInvalid(true);
+      return;
+    }
+    setEmailIsInvalid(false);
+    console.log("Sending HTTP request...")
   }
   
 
@@ -36,6 +44,7 @@ export default function Login() {
             name="email" 
             ref={email}
           />
+          <div className="control-error">{emailIsInvalid && <p>Please Enter a valid email address.</p>}</div>
         </div>
 
         <div className="control no-margin">
