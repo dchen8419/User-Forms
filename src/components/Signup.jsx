@@ -1,4 +1,8 @@
+import { useState } from "react";
+
 export default function Signup() {
+    const [passwordsAreNotEqual, setPasswordsAreNotEqual] = useState(false)
+
     function handleSubmit(event) {
         event.preventDefault();
 
@@ -6,9 +10,12 @@ export default function Signup() {
         const acquisitionChannel = fd.getAll('acquisition');
         const data = Object.fromEntries(fd.entries());
         data.acuisition = acquisitionChannel;
-        console.log(data)
 
-        event.target.reset();
+
+        if (data.password !== data['confirm-password']) {
+            setPasswordsAreNotEqual(true)
+            return;
+        }
     }
 
     //Added Required to the input and select fields of the form will help keep forms from submitting without the proper form values being filled
@@ -36,6 +43,7 @@ export default function Signup() {
                     name="confirm-password"
                     required
                     />
+                    <div className="control-error">{passwordsAreNotEqual && <p>Passwords must match.</p>}</div>
                 </div>
             </div>
 
